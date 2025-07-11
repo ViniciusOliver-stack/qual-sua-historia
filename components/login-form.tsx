@@ -74,7 +74,7 @@ export function LoginForm({
       <div className="min-h-screen flex items-center justify-center">
         <div className="flex items-center gap-2">
           <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-          <span className="text-lg">Verificando...</span>
+          <span className="text-lg text-white">Verificando...</span>
         </div>
       </div>
     );
@@ -246,18 +246,18 @@ export function LoginForm({
         </Card>
 
         {/* Termos de serviço */}
-        <div className="text-center text-xs sm:text-sm text-gray-500 mt-6 px-4">
+        <div className="text-center text-xs sm:text-sm text-white mt-6 px-4">
           Ao continuar, você concorda com nossos{" "}
           <a
             href="#"
-            className="text-blue-600 hover:text-blue-700 underline underline-offset-4 transition-colors"
+            className="text-white underline underline-offset-4 transition-colors"
           >
             Termos de Serviço
           </a>{" "}
           e{" "}
           <a
             href="#"
-            className="text-blue-600 hover:text-blue-700 underline underline-offset-4 transition-colors"
+            className="text-white underline underline-offset-4 transition-colors"
           >
             Política de Privacidade
           </a>

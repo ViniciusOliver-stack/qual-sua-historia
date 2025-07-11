@@ -423,18 +423,18 @@ export function RegisterForm({
         </Card>
 
         {/* Termos de serviço */}
-        <div className="text-center text-xs sm:text-sm text-gray-500 mt-6 px-4">
+        <div className="text-center text-xs sm:text-sm text-white mt-6 px-4">
           Ao continuar, você concorda com nossos{" "}
           <a
             href="#"
-            className="text-blue-600 hover:text-blue-700 underline underline-offset-4 transition-colors"
+            className="text-white underline underline-offset-4 transition-colors"
           >
             Termos de Serviço
           </a>{" "}
           e{" "}
           <a
             href="#"
-            className="text-blue-600 hover:text-blue-700 underline underline-offset-4 transition-colors"
+            className="text-white underline underline-offset-4 transition-colors"
           >
             Política de Privacidade
           </a>
