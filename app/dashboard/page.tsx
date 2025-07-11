@@ -1,6 +1,8 @@
 "use client";
 
-import { useSession, signOut } from "next-auth/react";
+import DashboardComponent from "@/components/dashboard";
+import HeaderApp from "@/components/header";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -28,7 +30,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      {/* <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           <div className="bg-white overflow-hidden shadow rounded-lg">
             <div className="px-4 py-5 sm:p-6">
@@ -65,7 +67,10 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
+
+      <HeaderApp />
+      <DashboardComponent />
     </div>
   );
 }
