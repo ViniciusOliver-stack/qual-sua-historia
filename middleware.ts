@@ -7,7 +7,9 @@ export default withAuth(
     const isAuth = !!token;
     const isAuthPage =
       req.nextUrl.pathname.startsWith("/login") ||
-      req.nextUrl.pathname.startsWith("/register");
+      req.nextUrl.pathname.startsWith("/register") ||
+      req.nextUrl.pathname.startsWith("/forgot-password") ||
+      req.nextUrl.pathname.startsWith("/reset-password");
     const isProtectedPage =
       req.nextUrl.pathname.startsWith("/dashboard") ||
       req.nextUrl.pathname.startsWith("/profile");
