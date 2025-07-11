@@ -46,7 +46,7 @@ export default function HeaderApp() {
             </div>
             <div>
               <h1 className="text-xl font-bold bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-                Qual sua história?
+                Me conte a sua história?
               </h1>
               <p className="text-sm text-muted-foreground">
                 Seus livros, suas histórias

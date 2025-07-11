@@ -25,7 +25,6 @@ import {
 import {
   BookOpen,
   Save,
-  Eye,
   ArrowLeft,
   Plus,
   Bold,
@@ -37,20 +36,14 @@ import {
   Type,
   Heart,
   Star,
-  Camera,
-  MapPin,
-  Calendar,
   Users,
   Briefcase,
   GraduationCap,
-  Music,
   Plane,
   ImageIcon,
   HelpCircle,
   Palette,
   Upload,
-  Play,
-  Search,
   CheckSquare,
   AlignLeft,
   AlignCenter,
@@ -173,38 +166,6 @@ const predefinedQuestions = [
   },
 ];
 
-// Mock YouTube search results
-const mockYouTubeResults = [
-  {
-    id: "1",
-    title: "Relaxing Piano Music - Peaceful Background Music",
-    channel: "Relaxing Music",
-    duration: "3:45",
-    thumbnail: "/placeholder.svg?height=90&width=120",
-  },
-  {
-    id: "2",
-    title: "Classical Music for Reading and Concentration",
-    channel: "Classical Tunes",
-    duration: "2:30",
-    thumbnail: "/placeholder.svg?height=90&width=120",
-  },
-  {
-    id: "3",
-    title: "Nature Sounds - Forest Ambience",
-    channel: "Nature Audio",
-    duration: "5:20",
-    thumbnail: "/placeholder.svg?height=90&width=120",
-  },
-  {
-    id: "4",
-    title: "Soft Jazz for Writing and Creativity",
-    channel: "Jazz Lounge",
-    duration: "4:15",
-    thumbnail: "/placeholder.svg?height=90&width=120",
-  },
-];
-
 interface HistoryState {
   content: string;
   timestamp: number;
@@ -220,11 +181,8 @@ export default function NovoLivro() {
   const [isStyleDialogOpen, setIsStyleDialogOpen] = useState(false);
   const [isQuestionsDialogOpen, setIsQuestionsDialogOpen] = useState(false);
   const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
-  const [isMusicDialogOpen, setIsMusicDialogOpen] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [musicSearch, setMusicSearch] = useState("");
-  const [selectedMusic, setSelectedMusic] = useState<any>(null);
   const [savedSelection, setSavedSelection] = useState<Range | null>(null);
   const [showFormatMenu, setShowFormatMenu] = useState(false);
   const [formatMenuPosition, setFormatMenuPosition] = useState({
@@ -571,55 +529,6 @@ export default function NovoLivro() {
     setImageUrl("");
   };
 
-  const insertMusicIntoEditor = (music: any) => {
-    if (editorRef.current) {
-      // Salvar estado atual no histórico antes da mudança
-      addToHistory(bookContent);
-
-      // Sempre use o helper robusto
-      restoreSelection();
-
-      const musicElement = document.createElement("div");
-      musicElement.style.cssText = `
-        margin: 20px 0;
-        padding: 16px;
-        background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
-        border-radius: 12px;
-        border: 1px solid #d1d5db;
-      `;
-      musicElement.innerHTML = `
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <div style="width: 60px; height: 60px; background: #3b82f6; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-            <span style="color: white; font-size: 24px;">🎵</span>
-          </div>
-          <div style="flex: 1;">
-            <h4 style="margin: 0; font-weight: 600; color: #1f2937;">${music.title}</h4>
-            <p style="margin: 4px 0 0 0; color: #6b7280; font-size: 0.9em;">${music.channel} • ${music.duration}</p>
-          </div>
-          <div style="width: 40px; height: 40px; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;">
-            <span style="color: white; font-size: 16px;">▶</span>
-          </div>
-        </div>
-      `;
-
-      const selection = window.getSelection();
-      if (selection && selection.rangeCount > 0) {
-        const range = selection.getRangeAt(0);
-        range.deleteContents();
-        range.insertNode(musicElement);
-        range.setStartAfter(musicElement);
-        selection.removeAllRanges();
-        selection.addRange(range);
-      }
-
-      const newContent = editorRef.current.innerHTML;
-      setBookContent(newContent);
-      setSavedSelection(null);
-    }
-    setIsMusicDialogOpen(false);
-    setSelectedMusic(null);
-  };
-
   const handleEditorInput = () => {
     if (editorRef.current) {
       const newContent = editorRef.current.innerHTML;
@@ -847,9 +756,6 @@ export default function NovoLivro() {
       case "imagem":
         setIsImageDialogOpen(true);
         break;
-      case "música":
-        setIsMusicDialogOpen(true);
-        break;
       case "pergunta":
         setIsQuestionsDialogOpen(true);
         break;
@@ -905,10 +811,6 @@ export default function NovoLivro() {
     setSelectedStyle(styleId);
     setIsStyleDialogOpen(false);
   };
-
-  const filteredMusic = mockYouTubeResults.filter((music) =>
-    music.title.toLowerCase().includes(musicSearch.toLowerCase())
-  );
 
   // Comandos organizados por categoria como no Notion
   const slashCommands = {
@@ -976,12 +878,6 @@ export default function NovoLivro() {
         label: "Image",
         description: "Upload or embed with a link.",
         icon: ImageIcon,
-      },
-      {
-        command: "música",
-        label: "Music",
-        description: "Add music from YouTube.",
-        icon: Music,
       },
     ],
   };
@@ -1069,7 +965,7 @@ export default function NovoLivro() {
                 <ArrowLeft className="w-5 h-5" />
               </Button>
               <div className="flex items-center space-x-3">
-                <div className="bg-gradient-to-r from-primary to-secondary p-2 rounded-xl">
+                <div className="bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 p-2 rounded-xl">
                   <BookOpen className="w-6 h-6 text-white" />
                 </div>
                 <div>
@@ -1114,15 +1010,8 @@ export default function NovoLivro() {
               </Button>
 
               <Button
-                variant="outline"
-                className="flex items-center space-x-2 bg-transparent"
-              >
-                <Eye className="w-4 h-4" />
-                <span>Preview</span>
-              </Button>
-              <Button
                 onClick={handleSave}
-                className="bg-gradient-to-r from-primary to-secondary text-white"
+                className="bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 text-white"
               >
                 <Save className="w-4 h-4 mr-2" />
                 Salvar
@@ -1330,54 +1219,6 @@ export default function NovoLivro() {
                 </Button>
               </div>
             )}
-          </DialogContent>
-        </Dialog>
-
-        {/* Music Dialog */}
-        <Dialog open={isMusicDialogOpen} onOpenChange={setIsMusicDialogOpen}>
-          <DialogContent className="sm:max-w-2xl max-h-[80vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>Adicionar Música</DialogTitle>
-              <DialogDescription>
-                Busque e selecione uma música do YouTube para adicionar ao seu
-                livro
-              </DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Buscar música..."
-                  value={musicSearch}
-                  onChange={(e) => setMusicSearch(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-              <div className="space-y-3">
-                {filteredMusic.map((music) => (
-                  <div
-                    key={music.id}
-                    className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer"
-                    onClick={() => insertMusicIntoEditor(music)}
-                  >
-                    <img
-                      src={music.thumbnail || "/placeholder.svg"}
-                      alt={music.title}
-                      className="w-16 h-12 object-cover rounded"
-                    />
-                    <div className="flex-1">
-                      <h4 className="font-medium text-sm">{music.title}</h4>
-                      <p className="text-xs text-muted-foreground">
-                        {music.channel} • {music.duration}
-                      </p>
-                    </div>
-                    <Button size="sm" variant="ghost">
-                      <Play className="w-4 h-4" />
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            </div>
           </DialogContent>
         </Dialog>
 
@@ -1723,40 +1564,6 @@ export default function NovoLivro() {
               </CardContent>
             </Card>
 
-            {/* Quick Actions */}
-            <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Button
-                variant="outline"
-                className="flex items-center space-x-2 bg-transparent"
-                onClick={() => setIsImageDialogOpen(true)}
-              >
-                <Camera className="w-4 h-4" />
-                <span>Adicionar Foto</span>
-              </Button>
-              <Button
-                variant="outline"
-                className="flex items-center space-x-2 bg-transparent"
-              >
-                <MapPin className="w-4 h-4" />
-                <span>Localização</span>
-              </Button>
-              <Button
-                variant="outline"
-                className="flex items-center space-x-2 bg-transparent"
-              >
-                <Calendar className="w-4 h-4" />
-                <span>Data</span>
-              </Button>
-              <Button
-                variant="outline"
-                className="flex items-center space-x-2 bg-transparent"
-                onClick={() => setIsMusicDialogOpen(true)}
-              >
-                <Music className="w-4 h-4" />
-                <span>Música</span>
-              </Button>
-            </div>
-
             {/* Dicas de uso */}
             <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-4">
               <h3 className="text-blue-800 font-medium mb-2 flex items-center">
@@ -1856,7 +1663,7 @@ export default function NovoLivro() {
                       <h1 className="text-2xl font-bold text-gray-800 mb-2">
                         {bookTitle || "Meu Livro de Memórias"}
                       </h1>
-                      <div className="w-24 h-0.5 bg-gradient-to-r from-primary to-secondary mx-auto"></div>
+                      <div className="w-24 h-0.5 bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 mx-auto"></div>
                     </div>
 
                     {/* Conteúdo da página */}
